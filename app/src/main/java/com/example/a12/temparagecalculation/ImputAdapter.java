@@ -36,7 +36,9 @@ public class ImputAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getCount(
+
+    ) {
         return list.size();
     }
 
@@ -68,9 +70,10 @@ public class ImputAdapter extends BaseAdapter {
         }
 
         holder.ref = i;
-        if(!String.valueOf((i+1)*2).equals("")){
-        holder.textView1.setText(String.valueOf((i+1)*2));}
-        holder.tempOfArea.setText(String.valueOf(list.get(i)));
+
+        holder.textView1.setText(String.valueOf((i+1)*2));
+       // if(!String.valueOf(list.get(i)).equals("")){
+       // holder.tempOfArea.setText(String.valueOf(list.get(i)));}
 
         holder.tempOfArea.addTextChangedListener(new TextWatcher() {
             @Override
