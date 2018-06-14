@@ -52,19 +52,28 @@ public class ImputAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
-        final int current = i;
-        View view = convertView;
-        if (view == null) {
-            view = lInflater.inflate(R.layout.item, viewGroup, false);
+        final ViewHolder holder;
+        if (convertView == null) {
+
+            holder = new ViewHolder();
+            convertView = lInflater.inflate(R.layout.item, null);
+            holder.textView1 = (TextView) convertView.findViewById(R.id.tempByTime);
+            holder.tempOfArea = (EditText) convertView.findViewById(R.id.tempOfArea);
+
+            convertView.setTag(holder);
+
+        } else {
+
+            holder = (ViewHolder) convertView.getTag();
         }
-        TextView tempByTime = (TextView) view.findViewById(R.id.tempByTime);
-        final EditText tempOfArea = ((EditText) view.findViewById(R.id.tempOfArea));
-        tempByTime.setText(String.valueOf((i+1)*2));
-        tempOfArea.setText(String.valueOf(list.get(i)));
-        tempOfArea.addTextChangedListener(new TextWatcher() {
+
+        holder.ref = i;
+        holder.textView1.setText(String.valueOf((i+1)*2));
+        holder.tempOfArea.setText(String.valueOf(list.get(i)));
+
+        holder.tempOfArea.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -75,18 +84,19 @@ public class ImputAdapter extends BaseAdapter {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(!String.valueOf(tempOfArea.getText()).equals("")) {
-                    list.set(current, Double.valueOf(String.valueOf(tempOfArea.getText())));
+                if(!String.valueOf(holder.tempOfArea.getText()).equals("")) {
+                    list.set(holder.ref, Double.valueOf(String.valueOf(holder.tempOfArea.getText())));
                 }else {
-                    list.set(current, 0.0);
+                    list.set(holder.ref, 0.0);
                 }
             }
         });
+        return convertView;
+    }
 
-
-
-
-
-        return view;
+    private class ViewHolder {
+        TextView textView1;
+        EditText tempOfArea;
+        int ref;
     }
 }
