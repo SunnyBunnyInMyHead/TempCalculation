@@ -9,7 +9,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private List<Double> accordList = new ArrayList<>();
-    ImputAdapter imputAdapter ;
+    private ImputAdapter imputAdapter ;
+    private DataCoef dataCoef = new DataCoef();
+    private final String[] typesOfKeeping = {"Штабель", "Стеллаж", "БМ"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +20,6 @@ public class MainActivity extends AppCompatActivity {
         imputAdapter = new ImputAdapter(this,accordList);
         ListView lvMain = (ListView) findViewById(R.id.lvMain);
         lvMain.setAdapter(imputAdapter);
-
-
-
     }
 
 }

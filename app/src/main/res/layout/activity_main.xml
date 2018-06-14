@@ -5,32 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/title1Layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/columnTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/titleTemp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Время измерения" />
 
             <TextView
                 android:id="@+id/titleMeaning"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Температура(C ͦ )" />
@@ -39,21 +41,21 @@
         <LinearLayout
             android:id="@+id/currentTemp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight="1.4"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/currentTempTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:text="TextView"
-                tools:text="текущая " />
+                android:text="текущее"
+                tools:text="текущее время" />
 
             <EditText
                 android:id="@+id/currentTempMeaning"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:ems="10"
@@ -65,50 +67,56 @@
     <ListView
         android:id="@+id/lvMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6"
+        android:layout_height="0dp"
+        android:layout_weight="3"
         android:visibility="visible" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/typeOfKeeping1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:visibility="visible" />
 
     <Button
         android:id="@+id/calculate1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Calculate" />
+        android:text="Calculate"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/res1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:text="Result:" />
 
     <LinearLayout
         android:id="@+id/result1Layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.6"
             android:text="Temperature" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.3"
             android:text="0.0" />
 
         <TextView
             android:id="@+id/degree1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_height="match_parent"
             android:text="(C ͦ )" />
 
     </LinearLayout>
@@ -116,20 +124,20 @@
     <LinearLayout
         android:id="@+id/tempDeliverLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tempDeliverTitel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="tempDeliver" />
 
         <EditText
             android:id="@+id/tempDeliverMeaning"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
@@ -138,15 +146,78 @@
         <TextView
             android:id="@+id/degree2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_height="match_parent"
+
+            android:text="(C ͦ )" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/checkLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6"
-        android:orientation="horizontal"></LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="(C ͦ )" />
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/typeOfKeeping2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75" />
+
+    <Button
+        android:id="@+id/calculate2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calculate" />
+
+    <TextView
+        android:id="@+id/res2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.075"
+        android:text="Result:" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/result2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="0.0" />
+
+        <TextView
+            android:id="@+id/degree3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:text="(C ͦ )" />
+
+    </LinearLayout>
+
 </LinearLayout>
