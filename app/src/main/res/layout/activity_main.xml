@@ -100,7 +100,7 @@
 
                 <GridView
                     android:id="@+id/gvMain2"
-                    android:layout_width="1000dp"
+                    android:layout_width="1100dp"
                     android:layout_height="wrap_content"
                     android:numColumns="13"
                     android:scrollbars="horizontal"

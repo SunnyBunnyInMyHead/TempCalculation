@@ -69,7 +69,7 @@ public class ImputAdapter extends BaseAdapter {
 
         holder.ref = i;
 
-        holder.textView1.setText(String.valueOf((i+1)*2)+": ");
+        holder.textView1.setText(String.valueOf((i+1)*2)+":");
        // if(!String.valueOf(list.get(i)).equals("")){
        // holder.tempOfArea.setText(String.valueOf(list.get(i)));}
 
