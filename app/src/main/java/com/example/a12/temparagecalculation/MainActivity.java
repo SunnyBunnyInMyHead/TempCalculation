@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> timeKeepingList = new ArrayList();
     private Spinner keepSpinner1, keepSpinner2, timeSpinner;
     private Button calculate1, calculate2;
+    private ImageButton hideButton;
+    private boolean firstPartCondition = true;
 
     private EditText currentTemp,result1,tempOfAirDeliver,tempOfAirCurrent;
     private TextView result2Calculation;
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialPart1() {
+        hideButton = (ImageButton)findViewById(R.id.imageButton);
         //list view
         imputAdapter = new ImputAdapter(this, accordList);
         //lvMain = (ListView) findViewById(R.id.lvMain);
@@ -166,9 +170,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mainPart();
+        hideButton();
         adjustGridView();
 
+    }
+
+    private void hideButton(){
+
+
+        hideButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(firstPartCondition){
+                        findViewById(R.id.Part1).setVisibility(View.GONE);
+                        firstPartCondition= false;
+                        }else {
+                            findViewById(R.id.Part1).setVisibility(View.VISIBLE);
+                            firstPartCondition= true;
+                        }
+                    }
+                }
+        );
     }
 
     private void adjustGridView() {
