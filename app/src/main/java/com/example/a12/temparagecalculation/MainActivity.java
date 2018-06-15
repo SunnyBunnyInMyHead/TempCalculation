@@ -159,14 +159,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+    
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mainPart();
+        adjustGridView();
 
+    }
+
+    private void adjustGridView() {
+        gvMain.setNumColumns(GridView.AUTO_FIT);
+        gvMain.setColumnWidth(200);
+        gvMain.setVerticalSpacing(2);
+        gvMain.setHorizontalSpacing(2);
     }
 
 }
