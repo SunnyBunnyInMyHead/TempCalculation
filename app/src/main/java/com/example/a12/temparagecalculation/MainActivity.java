@@ -116,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.result2).setVisibility(View.VISIBLE);
 
                 if (!String.valueOf(tempOfAirCurrent.getText()).equals("") && Double.valueOf(String.valueOf(tempOfAirCurrent.getText())) != 0.0) {
-                    result2 += koef2[timeSpinner.getSelectedItemPosition()] * (Double.valueOf(String.valueOf(tempOfAirCurrent)) - Double.valueOf(String.valueOf(tempOfAirDeliver))) * 0.5;
+                    double AirCurrent = (double)Double.valueOf(String.valueOf(tempOfAirCurrent.getText()));
+                    double AirDeliver = (double) Double.valueOf(String.valueOf(tempOfAirDeliver.getText()));
+                    result2 += koef2[timeSpinner.getSelectedItemPosition()] * (AirCurrent - AirDeliver) * 0.5;
                 }
                 result2Calculation.setText(String.valueOf(result2));
             }
