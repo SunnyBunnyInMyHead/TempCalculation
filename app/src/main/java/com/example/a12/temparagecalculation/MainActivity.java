@@ -20,44 +20,66 @@ public class MainActivity extends AppCompatActivity {
     private DataCoef dataCoef = new DataCoef();
     private final String[] typesOfKeeping = {"Штабель", "Стеллаж", "БМ"};
     private List<Integer> timeKeepingList = new ArrayList();
-    private Spinner keepspinner1, keepspinner2;
-    private EditText currentTemp;
-    private double currentTempMeaning;
+    private Spinner keepSpinner1, keepSpinner2, timeSpinner;
     private Button calculate1, calculate2;
-    private TextView result1;
+
+    private EditText currentTemp,result1,tempOfAirDeliver,tempOfAirCurrent;
+    private TextView result2Calculation;
+
     private ListView lvMain;
     private GridView gvMain;
 
-    public void initialTimeKeepingList() {
+    private double currentTempMeaning;
+
+    private void initialTimeKeepingList() {
         for (int i = 0; i < 12; i++) {
             timeKeepingList.add((i + 1) * 20);
         }
     }
 
-    public void initialise() {
-        initialTimeKeepingList();
+    private void initialSpinners() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typesOfKeeping);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        keepSpinner1 = (Spinner) findViewById(R.id.typeOfKeeping1);
+        keepSpinner2 = (Spinner) findViewById(R.id.typeOfKeeping2);
+        timeSpinner = (Spinner) findViewById(R.id.timeSpinner);
 
+        keepSpinner1.setAdapter(adapter);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typesOfKeeping);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        keepSpinner2.setAdapter(adapter);
+        ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, timeKeepingList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        timeSpinner.setAdapter(timeAdapter);
+    }
+
+    private void initialPart1() {
         //list view
         imputAdapter = new ImputAdapter(this, accordList);
         //lvMain = (ListView) findViewById(R.id.lvMain);
         gvMain = (GridView) findViewById(R.id.gvMain);
         gvMain.setAdapter(imputAdapter);
-        //spinners
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typesOfKeeping);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        keepspinner1 = (Spinner) findViewById(R.id.typeOfKeeping1);
-        keepspinner2 = (Spinner) findViewById(R.id.typeOfKeeping2);
-
-        keepspinner1.setAdapter(adapter);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typesOfKeeping);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        keepspinner2.setAdapter(adapter);
         //another part of 1 calculation
         currentTemp = (EditText) findViewById(R.id.currentTempMeaning);
-
-        result1 = (TextView) findViewById(R.id.result1Calculation);
-
+        result1 = (EditText) findViewById(R.id.result1Calculation);
         calculate1 = (Button) findViewById(R.id.calculate1);
+    }
+
+    private void initialPart2() {
+        calculate2 = (Button) findViewById(R.id.calculate2);
+        tempOfAirCurrent = (EditText) findViewById(R.id.airCurrentTemp);
+        tempOfAirDeliver = (EditText) findViewById(R.id.tempDeliverMeaning);
+        result2Calculation = (TextView) findViewById(R.id.result2Calculation);
+    }
+
+    private void mainPart() {
+        initialTimeKeepingList();
+        //spinners
+        initialSpinners();
+        initialPart1();
+
         calculate1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 findViewById(R.id.result1).setVisibility(View.VISIBLE);
 
-                double[] koef;
-                koef = getDoubles();
+                double[] koef = getDoublesForFirstCalculation();
                 for (int i = 0; i < accordList.size(); i++) {
                     if (accordList.get(i) > 0.0) {
                         sum += koef[i] * (accordList.get(i) - currentTempMeaning);
@@ -80,20 +101,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //another part of 2 calculation
-        calculate2 = (Button) findViewById(R.id.calculate2);
+        initialPart2();
+
         calculate2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                double result2;
+                if (!String.valueOf(result1.getText()).equals("")) {
+                    result2 = Double.valueOf(String.valueOf(result1.getText()));
+                } else {
+                    result2 = 0.0;
+                }
+                double[] koef2 = getDoublesForSecondCalculation();
                 findViewById(R.id.result2).setVisibility(View.VISIBLE);
 
+                if (!String.valueOf(tempOfAirCurrent.getText()).equals("") && Double.valueOf(String.valueOf(tempOfAirCurrent.getText())) != 0.0) {
+                    result2 += koef2[timeSpinner.getSelectedItemPosition()] * (Double.valueOf(String.valueOf(tempOfAirCurrent)) - Double.valueOf(String.valueOf(tempOfAirDeliver))) * 0.5;
+                }
+                result2Calculation.setText(String.valueOf(result2));
             }
         });
     }
 
-    private double[] getDoubles() {
-        double[] koef;
-        switch (keepspinner1.getSelectedItemPosition()) {
+    private double[] getDoublesForFirstCalculation() {
+        switch (keepSpinner1.getSelectedItemPosition()) {
             case (0): {
                 return dataCoef.getShtabelDeliver();
             }
@@ -110,13 +141,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private double[] getDoublesForSecondCalculation() {
+        switch (keepSpinner2.getSelectedItemPosition()) {
+            case (0): {
+                return dataCoef.getShtabelKeeping();
+            }
+            case (1): {
+                return dataCoef.getStelajKeeping();
+            }
+            case (2): {
+                return dataCoef.getBmKeeping();
+            }
+            default: {
+                return dataCoef.getShtabelKeeping();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initialise();
+        mainPart();
 
     }
 
