@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         //list view
         imputAdapter = new ImputAdapter(this, accordList);
         //lvMain = (ListView) findViewById(R.id.lvMain);
-        gvMain = (GridView) findViewById(R.id.gvMain);
+        gvMain = (GridView) findViewById(R.id.gvMain2);
         gvMain.setAdapter(imputAdapter);
         //another part of 1 calculation
         currentTemp = (EditText) findViewById(R.id.currentTempMeaning);
