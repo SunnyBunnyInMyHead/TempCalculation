@@ -21,12 +21,11 @@ public class MainActivity extends AppCompatActivity {
     private static int NUMBER_OF_ELEMENTS = 26;
     private InputAdapter inputAdapter;
 
-    private Spinner typeSpinnerDeliver1, typeSpinnerKeeping2, timeSpinner;
-    private Button calculateTempDeliving1, calculateTempKeeping2;
-    private ImageButton hideButton;
+    private Spinner typeSpinnerDeliver, typeSpinnerKeeping, timeSpinner;
+
     private boolean firstPartCondition = true;
 
-    private EditText result1Calculation;
+    private EditText resultDelivering;
     private TextView result2Calculation;
 
     private List<Integer> getTimeKeepingList() {
@@ -48,15 +47,15 @@ public class MainActivity extends AppCompatActivity {
     private void initialSpinners() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.typesOfKeeping));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinnerDeliver1 = (Spinner) findViewById(R.id.typeOfKeeping1);
-        typeSpinnerKeeping2 = (Spinner) findViewById(R.id.typeOfKeeping2);
+        typeSpinnerDeliver = (Spinner) findViewById(R.id.typeOfKeeping1);
+        typeSpinnerKeeping = (Spinner) findViewById(R.id.typeOfKeeping2);
         timeSpinner = (Spinner) findViewById(R.id.timeSpinner);
 
-        typeSpinnerDeliver1.setAdapter(adapter);
+        typeSpinnerDeliver.setAdapter(adapter);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.typesOfKeeping));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        typeSpinnerKeeping2.setAdapter(adapter);
+        typeSpinnerKeeping.setAdapter(adapter);
         ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getTimeKeepingList());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -64,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calcButtonDeliver() {
-        calculateTempDeliving1 = (Button) findViewById(R.id.calculate1);
-        calculateTempDeliving1.setOnClickListener(new View.OnClickListener() {
+        Button calculateTempDelivering = (Button) findViewById(R.id.calculate1);
+        calculateTempDelivering.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -87,19 +86,19 @@ public class MainActivity extends AppCompatActivity {
                         sum += koef[i] * (accordList.get(i) - currentTempMeaning);
                     }
                 }
-                result1Calculation.setText(String.valueOf(currentTempMeaning + sum));
+                resultDelivering.setText(String.valueOf(currentTempMeaning + sum));
             }
         });
     }
 
     private void calcButtonKeeping() {
-        calculateTempKeeping2 = (Button) findViewById(R.id.calculate2);
-        calculateTempKeeping2.setOnClickListener(new View.OnClickListener() {
+        Button calculateTempKeeping = (Button) findViewById(R.id.calculate2);
+        calculateTempKeeping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 double result2;
-                if (!String.valueOf(result1Calculation.getText()).equals("")) {
-                    result2 = Double.valueOf(String.valueOf(result1Calculation.getText()));
+                if (!String.valueOf(resultDelivering.getText()).equals("")) {
+                    result2 = Double.valueOf(String.valueOf(resultDelivering.getText()));
                 } else {
                     result2 = 0.0;
                 }
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private double[] getDoublesForDeliverCalculation() {
-        switch (typeSpinnerDeliver1.getSelectedItemPosition()) {
+        switch (typeSpinnerDeliver.getSelectedItemPosition()) {
             case (0):
                 return DataCoef.getShtabelDeliver();
             case (1):
@@ -136,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private double[] getDoublesForKeepingCalculation() {
-        switch (typeSpinnerKeeping2.getSelectedItemPosition()) {
+        switch (typeSpinnerKeeping.getSelectedItemPosition()) {
             case (0):
                 return DataCoef.getShtabelKeeping();
             case (1):
@@ -150,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void hideButton() {
+
+        ImageButton hideButton = (ImageButton) findViewById(R.id.imageButton);
         hideButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
@@ -183,12 +184,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialSpinners();
-        hideButton = (ImageButton) findViewById(R.id.imageButton);
+
         List<Double> accordList = uploadAccordList();
         inputAdapter = new InputAdapter(this, accordList);
         GridView gridDeliver = (GridView) findViewById(R.id.gridDeliverView);
         gridDeliver.setAdapter(inputAdapter);
-        result1Calculation = (EditText) findViewById(R.id.result1Calculation);
+        resultDelivering = (EditText) findViewById(R.id.result1Calculation);
         calcButtonDeliver();
         result2Calculation = (TextView) findViewById(R.id.result2Calculation);
         calcButtonKeeping();
