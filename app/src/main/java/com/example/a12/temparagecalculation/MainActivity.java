@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if (accordList.isEmpty()) {
-            initialiseListByZero();
+            accordList = initialiseListByZero();
         }
 
         return accordList;
