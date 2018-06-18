@@ -54,6 +54,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
+                    android:fontFamily="serif"
                     android:text="Час виміру" />
 
                 <TextView
@@ -61,6 +62,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:fontFamily="serif"
                     android:text="Температура(C ͦ )" />
             </LinearLayout>
 
@@ -168,6 +170,7 @@
             android:id="@+id/degree1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:fontFamily="serif"
             android:text="(C ͦ )"
             android:textSize="18sp" />
 
@@ -214,6 +217,7 @@
                 android:id="@+id/degree2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:fontFamily="serif"
                 android:text="(C ͦ )"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -244,6 +248,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:fontFamily="serif"
                 android:text="(C ͦ )"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -299,6 +304,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
 
+                    android:fontFamily="serif"
                     android:text="(C ͦ )" />
             </LinearLayout>
         </LinearLayout>
