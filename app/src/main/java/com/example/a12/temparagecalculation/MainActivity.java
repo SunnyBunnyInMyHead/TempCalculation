@@ -19,7 +19,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static int NUMBER_OF_ELEMENTS = 26;
-    private List<Double> accordList;
     private InputAdapter inputAdapter;
 
     private Spinner typeSpinnerDeliver1, typeSpinnerKeeping2, timeSpinner;
@@ -38,11 +37,12 @@ public class MainActivity extends AppCompatActivity {
         return timeKeepingList;
     }
 
-    private void initialiseListByZero(){
-        accordList = new ArrayList<>();
+    private  List<Double>  initialiseListByZero(){
+        List<Double> accordList = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
             accordList.add(0.0);
         }
+        return accordList;
     }
 
     private void initialSpinners() {
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initialSpinners();
         hideButton = (ImageButton) findViewById(R.id.imageButton);
-        uploadAccordList();
+        List<Double> accordList = uploadAccordList();
         inputAdapter = new InputAdapter(this, accordList);
         GridView gridDeliver = (GridView) findViewById(R.id.gridDeliverView);
         gridDeliver.setAdapter(inputAdapter);
@@ -196,11 +196,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         File accordFile = new File(getExternalFilesDir(null), "DataFile");
-        try {
-            FileWorker.delete(accordFile);
-            FileWorker.writeDoubleList(accordList, accordFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if (inputAdapter != null) {
+            List<Double> accordList = inputAdapter.getList();
+            try {
+                FileWorker.delete(accordFile);
+                FileWorker.writeDoubleList(accordList, accordFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }
