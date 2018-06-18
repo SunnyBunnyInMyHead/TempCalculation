@@ -14,12 +14,12 @@ public class FileWorker {
 
     public static void writeDoubleList(List<Double> list, File file) {
 
-        String res = new String();
+        StringBuilder res = new StringBuilder();
         for (Double double1 : list) {
-            res += String.valueOf(double1) + ";";
+            res.append(String.valueOf(double1)).append(";");
         }
 
-        write(file,res);
+        write(file,res.toString());
     }
 
     public static ArrayList<Double> readDoubleList(File file) throws FileNotFoundException {

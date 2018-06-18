@@ -13,17 +13,15 @@ import android.widget.TextView;
 import java.util.List;
 
 public class InputAdapter extends BaseAdapter {
-    private Context ctx;
     private LayoutInflater lInflater;
     private List<Double> list;
 
     public InputAdapter(Context context, List<Double> list) {
         this.list = list;
-        ctx = context;
-        lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public List<Double> getList(){
+    public List<Double> getList() {
         return list;
     }
 
@@ -61,9 +59,10 @@ public class InputAdapter extends BaseAdapter {
 
         holder.ref = i;
 
-        holder.textView1.setText(String.valueOf((i+1)*2)+":");
-        if(!list.get(i).equals(0.0)){
-        holder.tempOfArea.setText(String.valueOf(list.get(i)));}
+        holder.textView1.setText(String.valueOf((i + 1) * 2) + ":");
+        if (!list.get(i).equals(0.0)) {
+            holder.tempOfArea.setText(String.valueOf(list.get(i)));
+        }
 
         holder.tempOfArea.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,10 +76,9 @@ public class InputAdapter extends BaseAdapter {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
-                if(!String.valueOf(holder.tempOfArea.getText()).equals("")) {
+                if (!String.valueOf(holder.tempOfArea.getText()).equals("")) {
                     list.set(holder.ref, Double.valueOf(String.valueOf(holder.tempOfArea.getText())));
-                }else {
+                } else {
                     list.set(holder.ref, 0.0);
                 }
             }

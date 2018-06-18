@@ -71,11 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 double sum = 0.0;
                 EditText currentTemp = (EditText) findViewById(R.id.currentTempMeaning);
                 double currentTempMeaning;
-                if (!String.valueOf(currentTemp.getText()).equals("")) {
-                    currentTempMeaning = Double.valueOf(String.valueOf(currentTemp.getText()));
-                } else {
-                    currentTempMeaning = 0.0;
-                }
+                currentTempMeaning = getDoubleFromEditText(currentTemp);
                 findViewById(R.id.result1).setVisibility(View.VISIBLE);
 
                 List<Double> accordList = inputAdapter.getList();
@@ -91,17 +87,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private double getDoubleFromEditText(EditText currentTemp) {
+        if (!String.valueOf(currentTemp.getText()).equals("")) {
+            return Double.valueOf(String.valueOf(currentTemp.getText()));
+        } else {
+            return 0.0;
+        }
+    }
+
     private void calcButtonKeeping() {
         Button calculateTempKeeping = (Button) findViewById(R.id.calculate2);
         calculateTempKeeping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double result2;
-                if (!String.valueOf(resultDelivering.getText()).equals("")) {
-                    result2 = Double.valueOf(String.valueOf(resultDelivering.getText()));
-                } else {
-                    result2 = 0.0;
-                }
+                double result = getDoubleFromEditText(resultDelivering);
                 double[] koef2 = getDoublesForKeepingCalculation();
                 findViewById(R.id.result2).setVisibility(View.VISIBLE);
 
@@ -111,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
                 if (!String.valueOf(tempOfAirCurrent.getText()).equals("") && Double.valueOf(String.valueOf(tempOfAirCurrent.getText())) != 0.0) {
                     double AirCurrent = (double) Double.valueOf(String.valueOf(tempOfAirCurrent.getText()));
                     double AirDeliver = (double) Double.valueOf(String.valueOf(tempOfAirDeliver.getText()));
-                    result2 += koef2[timeSpinner.getSelectedItemPosition()] * (AirCurrent - AirDeliver) * 0.5;
+                    result += koef2[timeSpinner.getSelectedItemPosition()] * (AirCurrent - AirDeliver) * 0.5;
                 }
 
-                resultCalculation.setText(String.format("%.2f", result2));
+                resultCalculation.setText(String.format("%.2f", result));
             }
         });
     }
