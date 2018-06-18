@@ -24,8 +24,9 @@ public class FileDoubleWorker extends FileWorker{
 
 		ArrayList<Double> list = new ArrayList<>();
 		for (String rezval : textFromFile.split(";")) {
-			list.add(Double.valueOf(rezval));
-
+			if(!rezval.equals("")) {
+				list.add(Double.valueOf(rezval));
+			}
 		}
 		return list;
 	}

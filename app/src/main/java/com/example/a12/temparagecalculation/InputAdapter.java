@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ImputAdapter extends BaseAdapter {
+public class InputAdapter extends BaseAdapter {
     private Context ctx;
     private LayoutInflater lInflater;
     private int numberOfElements = 26;
     private List<Double> list;
 
-    public ImputAdapter(Context context, List<Double> list) {
+    public InputAdapter(Context context, List<Double> list) {
         this.list = list;
         ctx = context;
         lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -70,8 +70,8 @@ public class ImputAdapter extends BaseAdapter {
         holder.ref = i;
 
         holder.textView1.setText(String.valueOf((i+1)*2)+":");
-       // if(!String.valueOf(list.get(i)).equals("")){
-       // holder.tempOfArea.setText(String.valueOf(list.get(i)));}
+        if(!list.get(i).equals(0.0)){
+        holder.tempOfArea.setText(String.valueOf(list.get(i)));}
 
         holder.tempOfArea.addTextChangedListener(new TextWatcher() {
             @Override

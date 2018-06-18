@@ -2,37 +2,29 @@ package com.example.a12.temparagecalculation;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private FileDoubleWorker fileDoubleWorker = new FileDoubleWorker();
-    private File accordFile = new File(getExternalFilesDir(null), "DataFile");
+    private File accordFile;
 
     private List<Double> accordList = new ArrayList<>();
-    private ImputAdapter imputAdapter;
+    private InputAdapter inputAdapter;
     private DataCoef dataCoef = new DataCoef();
-    private final String[] typesOfKeeping = getResources().getStringArray(R.array.typesOfKeeping);
+    private String[] typesOfKeeping;
     private List<Integer> timeKeepingList = new ArrayList();
 
     private Spinner keepSpinner1, keepSpinner2, timeSpinner;
@@ -40,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton hideButton;
     private boolean firstPartCondition = true;
 
-    private EditText currentTemp,result1,tempOfAirDeliver,tempOfAirCurrent;
+    private EditText currentTemp, result1, tempOfAirDeliver, tempOfAirCurrent;
     private TextView result2Calculation;
-
+    private GridView gvMain;
     private double currentTempMeaning;
 
     private void initialTimeKeepingList() {
@@ -70,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialPart1() {
-        hideButton = (ImageButton)findViewById(R.id.imageButton);
-        imputAdapter = new ImputAdapter(this, accordList);
-        GridView gvMain = (GridView) findViewById(R.id.gvMain2);
-        gvMain.setAdapter(imputAdapter);
+        hideButton = (ImageButton) findViewById(R.id.imageButton);
+        inputAdapter = new InputAdapter(this, accordList);
+        gvMain = (GridView) findViewById(R.id.gvMain2);
+        gvMain.setAdapter(inputAdapter);
         //another part of 1 calculation
         currentTemp = (EditText) findViewById(R.id.currentTempMeaning);
         result1 = (EditText) findViewById(R.id.result1Calculation);
@@ -88,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mainPart() {
+        typesOfKeeping = getResources().getStringArray(R.array.typesOfKeeping);
         initialTimeKeepingList();
         //spinners
         initialSpinners();
@@ -129,10 +122,12 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.result2).setVisibility(View.VISIBLE);
 
                 if (!String.valueOf(tempOfAirCurrent.getText()).equals("") && Double.valueOf(String.valueOf(tempOfAirCurrent.getText())) != 0.0) {
-                    double AirCurrent = (double)Double.valueOf(String.valueOf(tempOfAirCurrent.getText()));
+                    double AirCurrent = (double) Double.valueOf(String.valueOf(tempOfAirCurrent.getText()));
                     double AirDeliver = (double) Double.valueOf(String.valueOf(tempOfAirDeliver.getText()));
                     result2 += koef2[timeSpinner.getSelectedItemPosition()] * (AirCurrent - AirDeliver) * 0.5;
                 }
+
+                result2 = ((int)(result2*100))/100.0;
                 result2Calculation.setText(String.valueOf(result2));
             }
         });
@@ -176,40 +171,62 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uploadAccordList();
         setContentView(R.layout.activity_main);
         mainPart();
         hideButton();
-        uploadAccordList();
+
     }
 
-    private void hideButton(){
+    private void hideButton() {
 
 
         hideButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(firstPartCondition){
-                        findViewById(R.id.Part1).setVisibility(View.GONE);
-                        firstPartCondition= false;
-                        }else {
-                            findViewById(R.id.Part1).setVisibility(View.VISIBLE);
-                            firstPartCondition= true;
-                        }
-                    }
-                }
+                                          @Override
+                                          public void onClick(View view) {
+                                              if (firstPartCondition) {
+                                                  findViewById(R.id.Part1).setVisibility(View.GONE);
+                                                  firstPartCondition = false;
+                                              } else {
+                                                  findViewById(R.id.Part1).setVisibility(View.VISIBLE);
+                                                  firstPartCondition = true;
+                                              }
+                                          }
+                                      }
         );
     }
 
-    private void uploadAccordList(){
+    private void uploadAccordList() {
+
         try {
-            fileDoubleWorker.exists(accordFile);
-            accordList = fileDoubleWorker.readDouble(accordFile);
+            accordFile = new File(getExternalFilesDir(null), "DataFile");
 
-        } catch (FileNotFoundException e) {
-            System.out.println("file not exist");
-            imputAdapter.initialiseListByZero(accordList);
+            if (accordFile.exists() && accordFile.canRead()) {
 
+                accordList = fileDoubleWorker.readDouble(accordFile);
+                if (accordList.size() <= 0) {
+                    inputAdapter.initialiseListByZero(accordList);
+                    fileDoubleWorker.write(accordList, accordFile);
+
+                }
+            } else {
+                System.out.println("file not exists");
+                accordFile.createNewFile();
+                inputAdapter.initialiseListByZero(accordList);
+                fileDoubleWorker.write(accordList, accordFile);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        uploadAccordList();
+        gvMain.invalidate();
+
     }
 
     @Override
@@ -217,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         try {
             fileDoubleWorker.delete(accordFile);
-            fileDoubleWorker.write( accordList,accordFile);
+            fileDoubleWorker.write(accordList, accordFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
