@@ -2,6 +2,7 @@ package com.example.a12.temparagecalculation;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,15 +13,28 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private FileDoubleWorker fileDoubleWorker = new FileDoubleWorker();
+    private File accordFile = new File(getExternalFilesDir(null), "DataFile");
+
     private List<Double> accordList = new ArrayList<>();
     private ImputAdapter imputAdapter;
     private DataCoef dataCoef = new DataCoef();
-    private final String[] typesOfKeeping = {"Штабель", "Стеллаж", "БМ"};
+    private final String[] typesOfKeeping = getResources().getStringArray(R.array.typesOfKeeping);
     private List<Integer> timeKeepingList = new ArrayList();
+
     private Spinner keepSpinner1, keepSpinner2, timeSpinner;
     private Button calculate1, calculate2;
     private ImageButton hideButton;
@@ -28,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText currentTemp,result1,tempOfAirDeliver,tempOfAirCurrent;
     private TextView result2Calculation;
-
-    private ListView lvMain;
-    private GridView gvMain;
 
     private double currentTempMeaning;
 
@@ -60,10 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialPart1() {
         hideButton = (ImageButton)findViewById(R.id.imageButton);
-        //list view
         imputAdapter = new ImputAdapter(this, accordList);
-        //lvMain = (ListView) findViewById(R.id.lvMain);
-        gvMain = (GridView) findViewById(R.id.gvMain2);
+        GridView gvMain = (GridView) findViewById(R.id.gvMain2);
         gvMain.setAdapter(imputAdapter);
         //another part of 1 calculation
         currentTemp = (EditText) findViewById(R.id.currentTempMeaning);
@@ -163,18 +172,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         mainPart();
         hideButton();
-        adjustGridView();
-
+        uploadAccordList();
     }
 
     private void hideButton(){
@@ -195,11 +200,28 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void adjustGridView() {
-        gvMain.setNumColumns(GridView.AUTO_FIT);
-        gvMain.setColumnWidth(200);
-        gvMain.setVerticalSpacing(2);
-        gvMain.setHorizontalSpacing(2);
+    private void uploadAccordList(){
+        try {
+            fileDoubleWorker.exists(accordFile);
+            accordList = fileDoubleWorker.readDouble(accordFile);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("file not exist");
+            imputAdapter.initialiseListByZero(accordList);
+
+        }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            fileDoubleWorker.delete(accordFile);
+            fileDoubleWorker.write( accordList,accordFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }

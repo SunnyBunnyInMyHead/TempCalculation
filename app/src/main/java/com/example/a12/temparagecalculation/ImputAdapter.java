@@ -22,10 +22,10 @@ public class ImputAdapter extends BaseAdapter {
         this.list = list;
         ctx = context;
         lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        initialise(list);
+        //initialise(list);
     }
 
-    private void initialise(List<Double> listOfDouble){
+    public void initialiseListByZero(List<Double> listOfDouble){
         for (int i = 0; i < numberOfElements; i++) {
             listOfDouble.add(0.0);
         }
