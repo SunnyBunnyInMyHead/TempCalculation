@@ -15,16 +15,13 @@ import java.util.List;
 public class InputAdapter extends BaseAdapter {
     private Context ctx;
     private LayoutInflater lInflater;
-
     private List<Double> list;
 
     public InputAdapter(Context context, List<Double> list) {
         this.list = list;
         ctx = context;
         lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //initialise(list);
     }
-
 
     public List<Double> getList(){
         return list;

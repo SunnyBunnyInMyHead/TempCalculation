@@ -102,7 +102,7 @@
 
 
                 <GridView
-                    android:id="@+id/gvMain2"
+                    android:id="@+id/gridDeliverView"
                     android:layout_width="1100dp"
                     android:layout_height="wrap_content"
                     android:numColumns="13"

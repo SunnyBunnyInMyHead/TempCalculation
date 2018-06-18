@@ -18,23 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private FileDoubleWorker fileDoubleWorker = new FileDoubleWorker();
-    private File accordFile;
     private static int NUMBER_OF_ELEMENTS = 26;
-    private List<Double> accordList = new ArrayList<>();
+    private List<Double> accordList;
     private InputAdapter inputAdapter;
-    private String[] typesOfKeeping;
 
-
-    private Spinner keepSpinner1, keepSpinner2, timeSpinner;
-    private Button calculate1, calculate2;
+    private Spinner typeSpinnerDeliver1, typeSpinnerKeeping2, timeSpinner;
+    private Button calculateTempDeliving1, calculateTempKeeping2;
     private ImageButton hideButton;
     private boolean firstPartCondition = true;
 
-    private EditText currentTemp, result1, tempOfAirDeliver, tempOfAirCurrent;
+    private EditText result1Calculation;
     private TextView result2Calculation;
-    private GridView gvMain;
-    private double currentTempMeaning;
 
     private List<Integer> getTimeKeepingList() {
         List<Integer> timeKeepingList = new ArrayList();
@@ -44,52 +38,40 @@ public class MainActivity extends AppCompatActivity {
         return timeKeepingList;
     }
 
+    private void initialiseListByZero(){
+        accordList = new ArrayList<>();
+        for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
+            accordList.add(0.0);
+        }
+    }
+
     private void initialSpinners() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typesOfKeeping);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.typesOfKeeping));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        keepSpinner1 = (Spinner) findViewById(R.id.typeOfKeeping1);
-        keepSpinner2 = (Spinner) findViewById(R.id.typeOfKeeping2);
+        typeSpinnerDeliver1 = (Spinner) findViewById(R.id.typeOfKeeping1);
+        typeSpinnerKeeping2 = (Spinner) findViewById(R.id.typeOfKeeping2);
         timeSpinner = (Spinner) findViewById(R.id.timeSpinner);
 
-        keepSpinner1.setAdapter(adapter);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typesOfKeeping);
+        typeSpinnerDeliver1.setAdapter(adapter);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.typesOfKeeping));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        keepSpinner2.setAdapter(adapter);
-        ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, getTimeKeepingList());
+        typeSpinnerKeeping2.setAdapter(adapter);
+        ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getTimeKeepingList());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         timeSpinner.setAdapter(timeAdapter);
     }
 
-    private void initialPart1() {
-        hideButton = (ImageButton) findViewById(R.id.imageButton);
-        inputAdapter = new InputAdapter(this, accordList);
-        gvMain = (GridView) findViewById(R.id.gvMain2);
-        gvMain.setAdapter(inputAdapter);
-        //another part of 1 calculation
-        currentTemp = (EditText) findViewById(R.id.currentTempMeaning);
-        result1 = (EditText) findViewById(R.id.result1Calculation);
-        calculate1 = (Button) findViewById(R.id.calculate1);
-    }
-
-    private void initialPart2() {
-        calculate2 = (Button) findViewById(R.id.calculate2);
-        tempOfAirCurrent = (EditText) findViewById(R.id.airCurrentTemp);
-        tempOfAirDeliver = (EditText) findViewById(R.id.tempDeliverMeaning);
-        result2Calculation = (TextView) findViewById(R.id.result2Calculation);
-    }
-
-    private void mainPart() {
-        typesOfKeeping = getResources().getStringArray(R.array.typesOfKeeping);
-        //spinners
-        initialSpinners();
-        initialPart1();
-
-        calculate1.setOnClickListener(new View.OnClickListener() {
+    private void calcButtonDeliver(){
+        calculateTempDeliving1 = (Button) findViewById(R.id.calculate1);
+        calculateTempDeliving1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 double sum = 0.0;
+                EditText currentTemp = (EditText) findViewById(R.id.currentTempMeaning);
+                double currentTempMeaning;
                 if (!String.valueOf(currentTemp.getText()).equals("")) {
                     currentTempMeaning = Double.valueOf(String.valueOf(currentTemp.getText()));
                 } else {
@@ -103,23 +85,27 @@ public class MainActivity extends AppCompatActivity {
                         sum += koef[i] * (accordList.get(i) - currentTempMeaning);
                     }
                 }
-                result1.setText(String.valueOf(currentTempMeaning + sum));
+                result1Calculation.setText(String.valueOf(currentTempMeaning + sum));
             }
         });
+    }
 
-        initialPart2();
-
-        calculate2.setOnClickListener(new View.OnClickListener() {
+    private void calcButtonKeeping(){
+        calculateTempKeeping2 = (Button) findViewById(R.id.calculate2);
+        calculateTempKeeping2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 double result2;
-                if (!String.valueOf(result1.getText()).equals("")) {
-                    result2 = Double.valueOf(String.valueOf(result1.getText()));
+                if (!String.valueOf(result1Calculation.getText()).equals("")) {
+                    result2 = Double.valueOf(String.valueOf(result1Calculation.getText()));
                 } else {
                     result2 = 0.0;
                 }
                 double[] koef2 = getDoublesForSecondCalculation();
                 findViewById(R.id.result2).setVisibility(View.VISIBLE);
+
+                EditText tempOfAirCurrent = (EditText) findViewById(R.id.airCurrentTemp);
+                EditText tempOfAirDeliver = (EditText) findViewById(R.id.tempDeliverMeaning);
 
                 if (!String.valueOf(tempOfAirCurrent.getText()).equals("") && Double.valueOf(String.valueOf(tempOfAirCurrent.getText())) != 0.0) {
                     double AirCurrent = (double) Double.valueOf(String.valueOf(tempOfAirCurrent.getText()));
@@ -127,14 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     result2 += koef2[timeSpinner.getSelectedItemPosition()] * (AirCurrent - AirDeliver) * 0.5;
                 }
 
-//                result2 = ((int)(result2*100))/100.0;
                 result2Calculation.setText(String.format("%.2f", result2));
             }
         });
     }
 
     private double[] getDoublesForFirstCalculation() {
-        switch (keepSpinner1.getSelectedItemPosition()) {
+        switch (typeSpinnerDeliver1.getSelectedItemPosition()) {
             case (0):
                 return DataCoef.getShtabelDeliver();
             case (1):
@@ -149,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private double[] getDoublesForSecondCalculation() {
-        switch (keepSpinner2.getSelectedItemPosition()) {
+        switch (typeSpinnerKeeping2.getSelectedItemPosition()) {
             case (0):
                 return DataCoef.getShtabelKeeping();
             case (1):
@@ -162,45 +147,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        uploadAccordList();
-        setContentView(R.layout.activity_main);
-        mainPart();
-        hideButton();
-
-    }
-
     private void hideButton() {
-
-
         hideButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
-                                              if (firstPartCondition) {
-                                                  findViewById(R.id.Part1).setVisibility(View.GONE);
-                                                  firstPartCondition = false;
-                                              } else {
-                                                  findViewById(R.id.Part1).setVisibility(View.VISIBLE);
-                                                  firstPartCondition = true;
-                                              }
+                                              findViewById(R.id.Part1).setVisibility(firstPartCondition?View.GONE:View.VISIBLE);
+                                              firstPartCondition = !firstPartCondition;
                                           }
                                       }
         );
     }
 
-    public void initialiseListByZero(){
-        for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
-            accordList.add(0.0);
-        }
-    }
-
     private void uploadAccordList() {
+        accordList = new ArrayList<>();
+
         try {
-            accordFile = new File(getExternalFilesDir(null), "DataFile");
+            File accordFile = new File(getExternalFilesDir(null), "DataFile");
             if (accordFile.exists() && accordFile.canRead()) {
-                accordList = fileDoubleWorker.readDouble(accordFile);
+                accordList = FileWorker.readDoubleList(accordFile);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -211,11 +175,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initialSpinners();
+        hideButton = (ImageButton) findViewById(R.id.imageButton);
+        uploadAccordList();
+        inputAdapter = new InputAdapter(this, accordList);
+        GridView gridDeliver = (GridView) findViewById(R.id.gridDeliverView);
+        gridDeliver.setAdapter(inputAdapter);
+        result1Calculation = (EditText) findViewById(R.id.result1Calculation);
+        calcButtonDeliver();
+        result2Calculation = (TextView) findViewById(R.id.result2Calculation);
+        calcButtonKeeping();
+        hideButton();
+
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        File accordFile = new File(getExternalFilesDir(null), "DataFile");
         try {
-            fileDoubleWorker.delete(accordFile);
-            fileDoubleWorker.write(accordList, accordFile);
+            FileWorker.delete(accordFile);
+            FileWorker.writeDoubleList(accordList, accordFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

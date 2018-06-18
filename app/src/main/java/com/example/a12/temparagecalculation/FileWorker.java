@@ -6,10 +6,36 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileWorker {
 
-    public void write(File file, String text) {
+
+    public static void writeDoubleList(List<Double> list, File file) {
+
+        String res = new String();
+        for (Double double1 : list) {
+            res += String.valueOf(double1) + ";";
+        }
+
+        write(file,res);
+    }
+
+    public static ArrayList<Double> readDoubleList(File file) throws FileNotFoundException {
+
+        String textFromFile = read(file);
+
+        ArrayList<Double> list = new ArrayList<>();
+        for (String rezval : textFromFile.split(";")) {
+            if(!rezval.equals("")) {
+                list.add(Double.valueOf(rezval));
+            }
+        }
+        return list;
+    }
+
+    public static void write(File file, String text) {
 
         try {
             if (!file.exists()) {
@@ -27,7 +53,7 @@ public class FileWorker {
         }
     }
 
-    public String read(File file) throws FileNotFoundException {
+    public static String read(File file) throws FileNotFoundException {
 
         StringBuilder sb = new StringBuilder();
 
@@ -52,13 +78,13 @@ public class FileWorker {
         return sb.toString();
     }
 
-    protected void exists(File file) throws FileNotFoundException {
+    protected static void exists(File file) throws FileNotFoundException {
         if (!file.exists()) {
             throw new FileNotFoundException(file.getName());
         }
     }
 
-    public void delete(File file) throws FileNotFoundException {
+    public static void delete(File file) throws FileNotFoundException {
         exists(file);
         file.delete();
     }
