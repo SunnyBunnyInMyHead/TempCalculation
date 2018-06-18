@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 findViewById(R.id.result1).setVisibility(View.VISIBLE);
 
-                double[] koef = getDoublesForFirstCalculation();
+                double[] koef = getDoublesForDeliverCalculation();
                 for (int i = 0; i < accordList.size(); i++) {
                     if (accordList.get(i) > 0.0) {
                         sum += koef[i] * (accordList.get(i) - currentTempMeaning);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     result2 = 0.0;
                 }
-                double[] koef2 = getDoublesForSecondCalculation();
+                double[] koef2 = getDoublesForKeepingCalculation();
                 findViewById(R.id.result2).setVisibility(View.VISIBLE);
 
                 EditText tempOfAirCurrent = (EditText) findViewById(R.id.airCurrentTemp);
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private double[] getDoublesForFirstCalculation() {
+    private double[] getDoublesForDeliverCalculation() {
         switch (typeSpinnerDeliver1.getSelectedItemPosition()) {
             case (0):
                 return DataCoef.getShtabelDeliver();
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private double[] getDoublesForSecondCalculation() {
+    private double[] getDoublesForKeepingCalculation() {
         switch (typeSpinnerKeeping2.getSelectedItemPosition()) {
             case (0):
                 return DataCoef.getShtabelKeeping();
