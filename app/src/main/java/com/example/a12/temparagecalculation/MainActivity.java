@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean firstPartCondition = true;
 
     private EditText resultDelivering;
-    private TextView result2Calculation;
+    private TextView resultCalculation;
 
     private List<Integer> getTimeKeepingList() {
         List<Integer> timeKeepingList = new ArrayList();
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     result2 += koef2[timeSpinner.getSelectedItemPosition()] * (AirCurrent - AirDeliver) * 0.5;
                 }
 
-                result2Calculation.setText(String.format("%.2f", result2));
+                resultCalculation.setText(String.format("%.2f", result2));
             }
         });
     }
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         gridDeliver.setAdapter(inputAdapter);
         resultDelivering = (EditText) findViewById(R.id.result1Calculation);
         calcButtonDeliver();
-        result2Calculation = (TextView) findViewById(R.id.result2Calculation);
+        resultCalculation = (TextView) findViewById(R.id.result2Calculation);
         calcButtonKeeping();
         hideButton();
 
