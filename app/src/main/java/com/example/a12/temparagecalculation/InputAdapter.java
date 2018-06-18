@@ -15,7 +15,7 @@ import java.util.List;
 public class InputAdapter extends BaseAdapter {
     private Context ctx;
     private LayoutInflater lInflater;
-    private int numberOfElements = 26;
+
     private List<Double> list;
 
     public InputAdapter(Context context, List<Double> list) {
@@ -25,11 +25,6 @@ public class InputAdapter extends BaseAdapter {
         //initialise(list);
     }
 
-    public void initialiseListByZero(List<Double> listOfDouble){
-        for (int i = 0; i < numberOfElements; i++) {
-            listOfDouble.add(0.0);
-        }
-    }
 
     public List<Double> getList(){
         return list;

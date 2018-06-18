@@ -20,12 +20,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private FileDoubleWorker fileDoubleWorker = new FileDoubleWorker();
     private File accordFile;
-
+    private static int NUMBER_OF_ELEMENTS = 26;
     private List<Double> accordList = new ArrayList<>();
     private InputAdapter inputAdapter;
-    private DataCoef dataCoef = new DataCoef();
     private String[] typesOfKeeping;
-    private List<Integer> timeKeepingList = new ArrayList();
+
 
     private Spinner keepSpinner1, keepSpinner2, timeSpinner;
     private Button calculate1, calculate2;
@@ -37,10 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private GridView gvMain;
     private double currentTempMeaning;
 
-    private void initialTimeKeepingList() {
+    private List<Integer> getTimeKeepingList() {
+        List<Integer> timeKeepingList = new ArrayList();
         for (int i = 0; i < 12; i++) {
             timeKeepingList.add((i + 1) * 20);
         }
+        return timeKeepingList;
     }
 
     private void initialSpinners() {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         keepSpinner2.setAdapter(adapter);
-        ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, timeKeepingList);
+        ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, getTimeKeepingList());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         timeSpinner.setAdapter(timeAdapter);
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void mainPart() {
         typesOfKeeping = getResources().getStringArray(R.array.typesOfKeeping);
-        initialTimeKeepingList();
         //spinners
         initialSpinners();
         initialPart1();
@@ -127,25 +127,22 @@ public class MainActivity extends AppCompatActivity {
                     result2 += koef2[timeSpinner.getSelectedItemPosition()] * (AirCurrent - AirDeliver) * 0.5;
                 }
 
-                result2 = ((int)(result2*100))/100.0;
-                result2Calculation.setText(String.valueOf(result2));
+//                result2 = ((int)(result2*100))/100.0;
+                result2Calculation.setText(String.format("%.2f", result2));
             }
         });
     }
 
     private double[] getDoublesForFirstCalculation() {
         switch (keepSpinner1.getSelectedItemPosition()) {
-            case (0): {
-                return dataCoef.getShtabelDeliver();
-            }
-            case (1): {
-                return dataCoef.getStelajDeliver();
-            }
-            case (2): {
-                return dataCoef.getBmDeliver();
-            }
+            case (0):
+                return DataCoef.getShtabelDeliver();
+            case (1):
+                return DataCoef.getStelajDeliver();
+            case (2):
+                return DataCoef.getBmDeliver();
             default: {
-                return dataCoef.getShtabelDeliver();
+                return DataCoef.getShtabelDeliver();
             }
         }
 
@@ -153,17 +150,14 @@ public class MainActivity extends AppCompatActivity {
 
     private double[] getDoublesForSecondCalculation() {
         switch (keepSpinner2.getSelectedItemPosition()) {
-            case (0): {
-                return dataCoef.getShtabelKeeping();
-            }
-            case (1): {
-                return dataCoef.getStelajKeeping();
-            }
-            case (2): {
-                return dataCoef.getBmKeeping();
-            }
+            case (0):
+                return DataCoef.getShtabelKeeping();
+            case (1):
+                return DataCoef.getStelajKeeping();
+            case (2):
+                return DataCoef.getBmKeeping();
             default: {
-                return dataCoef.getShtabelKeeping();
+                return DataCoef.getShtabelKeeping();
             }
         }
     }
@@ -196,37 +190,24 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void uploadAccordList() {
-
-        try {
-            accordFile = new File(getExternalFilesDir(null), "DataFile");
-
-            if (accordFile.exists() && accordFile.canRead()) {
-
-                accordList = fileDoubleWorker.readDouble(accordFile);
-                if (accordList.size() <= 0) {
-                    inputAdapter.initialiseListByZero(accordList);
-                    fileDoubleWorker.write(accordList, accordFile);
-
-                }
-            } else {
-                System.out.println("file not exists");
-                accordFile.createNewFile();
-                inputAdapter.initialiseListByZero(accordList);
-                fileDoubleWorker.write(accordList, accordFile);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void initialiseListByZero(){
+        for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
+            accordList.add(0.0);
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        uploadAccordList();
-        gvMain.invalidate();
-
+    private void uploadAccordList() {
+        try {
+            accordFile = new File(getExternalFilesDir(null), "DataFile");
+            if (accordFile.exists() && accordFile.canRead()) {
+                accordList = fileDoubleWorker.readDouble(accordFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (accordList.isEmpty()) {
+            initialiseListByZero();
+        }
     }
 
     @Override
@@ -238,7 +219,5 @@ public class MainActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
 }
