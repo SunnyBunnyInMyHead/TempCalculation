@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         return timeKeepingList;
     }
 
-    private  List<Double>  initialiseListByZero(){
+    private List<Double> initialiseListByZero() {
         List<Double> accordList = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
             accordList.add(0.0);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         timeSpinner.setAdapter(timeAdapter);
     }
 
-    private void calcButtonDeliver(){
+    private void calcButtonDeliver() {
         calculateTempDeliving1 = (Button) findViewById(R.id.calculate1);
         calculateTempDeliving1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 findViewById(R.id.result1).setVisibility(View.VISIBLE);
 
+                List<Double> accordList = inputAdapter.getList();
+
                 double[] koef = getDoublesForDeliverCalculation();
                 for (int i = 0; i < accordList.size(); i++) {
                     if (accordList.get(i) > 0.0) {
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void calcButtonKeeping(){
+    private void calcButtonKeeping() {
         calculateTempKeeping2 = (Button) findViewById(R.id.calculate2);
         calculateTempKeeping2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,15 +153,15 @@ public class MainActivity extends AppCompatActivity {
         hideButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
-                                              findViewById(R.id.Part1).setVisibility(firstPartCondition?View.GONE:View.VISIBLE);
+                                              findViewById(R.id.Part1).setVisibility(firstPartCondition ? View.GONE : View.VISIBLE);
                                               firstPartCondition = !firstPartCondition;
                                           }
                                       }
         );
     }
 
-    private void uploadAccordList() {
-        accordList = new ArrayList<>();
+    private List<Double> uploadAccordList() {
+        List<Double> accordList = new ArrayList<>();
 
         try {
             File accordFile = new File(getExternalFilesDir(null), "DataFile");
@@ -172,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
         if (accordList.isEmpty()) {
             initialiseListByZero();
         }
+
+        return accordList;
     }
 
     @Override
