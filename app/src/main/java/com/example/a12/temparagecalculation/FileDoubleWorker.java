@@ -23,8 +23,8 @@ public class FileDoubleWorker extends FileWorker{
 		String textFromFile = read(file);
 
 		ArrayList<Double> list = new ArrayList<>();
-		for (String retval : textFromFile.split(";")) {
-			list.add(Double.valueOf(retval));
+		for (String rezval : textFromFile.split(";")) {
+			list.add(Double.valueOf(rezval));
 
 		}
 		return list;
