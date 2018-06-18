@@ -262,7 +262,7 @@
             android:id="@+id/calculate2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calculate" />
+            android:text="Обрахувати" />
 
         <LinearLayout
             android:id="@+id/result2"
